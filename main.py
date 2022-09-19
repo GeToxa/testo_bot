@@ -63,7 +63,7 @@ def chose_to_del(message):
 	except ValueError:
 		bot.send_message(message.chat.id, 'Вы ввели не число')
 	else:
-		bot.send_message(message.chat.id, 'Задача удалена')
+		bot.send_message(message.chat.id, f'Задача {slovar_del[del_number]} удалена')
 
 
 def new_msg_handler_add(message):
