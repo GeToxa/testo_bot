@@ -11,6 +11,7 @@ user = bot.get_me()
 def send_welcome(message):
 
 
+	user_name = message.from_user.first_name
 
 	#Клавиатура для управления
 
@@ -18,8 +19,13 @@ def send_welcome(message):
 	item1 = types.KeyboardButton('Добавить задачу')
 	item2 = types.KeyboardButton('Посмотреть задачи')
 	markup.add(item1, item2)
-	bot.reply_to(message, "Добро пожаловать в общий список дел по домашней бытовухе", reply_markup=markup)
 
+	# Ответы
+
+	bot.reply_to(message, f"Добро пожаловать {user_name}. Этот бот составляет общий список дел. Теперь не увернуться от дел!",
+				 reply_markup=markup)
+
+	bot.send_message(message, "Для вызова справки напишите слово 'справка'")
 
 
 def read_spisok(message, spisok_del):
@@ -29,20 +35,28 @@ def read_spisok(message, spisok_del):
 
 @bot.message_handler(content_types=['text'])
 def main_act(message):
+
 #	if message.chat.type == 'private':
-#		bot.send_message(message.chat.id, 'Хорошо сейчас')
+#		message_non = message.text
+#		bot.send_message(message.chat.id, f'Такой задачи нет {message_non}')
 
 	if message.text == 'Добавить задачу':
-		bot.send_message(message.chat.id, 'Какую задачу Вы хотите добавить ?))')
+		add_choise = bot.send_message(message.chat.id, 'Какую задачу Вы хотите добавить ?))')
 
-	elif message.text == 'Посмотреть задачи':
+		bot.register_next_step_handler(add_choise, new_msg_handler_add)
+
+	if message.text == 'Посмотреть задачи':
 		read_spisok(message, spisok_del)
 
+def new_msg_handler_add(message):
 
-@bot.message_handler(commands=['Добавить задачу'])
-def main_act(message):
-	new_message = message.text
-	bot.send_message(message.chat.id, f'Вы добавили {new_message}')
+	new_message_add = message.text
+	spisok_del.append(new_message_add)
+	bot.send_message(message.chat.id, f'Вы добавили: {new_message_add}')
 
 
 bot.polling(none_stop=True)
+
+
+
+
