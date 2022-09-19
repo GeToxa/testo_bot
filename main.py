@@ -94,7 +94,3 @@ def read_spisok(message, spisok_del):
 
 
 bot.polling(none_stop=True)
-
-
-
-
